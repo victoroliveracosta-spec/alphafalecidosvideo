@@ -4,11 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homenagem Alphacampus</title>
-    <!-- Fonte Cormorant Garamond -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Fonte Arial (Padrão) -->
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: #004d40; color: #FFD700; font-family: 'Cormorant Garamond', serif; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; overflow: hidden; text-align: center; }
+        body { 
+            background-color: #004d40; 
+            background-image: url('background.jpeg'); 
+            background-size: contain; /* Tenta 'contain' para garantir que a imagem inteira apareça */
+            background-position: center; /* Centraliza a imagem */
+            background-repeat: no-repeat; /* Evita a repetição da imagem */
+            filter: none; /* Remove o filtro para garantir que a imagem apareça */
+            color: #D4B851; /* Cor Amarelo-Ouro extraída da imagem */
+            font-family: Arial, sans-serif; /* Mantido em Arial */ 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            overflow: hidden; 
+            text-align: center; 
+        }
         #name-container { 
             font-size: 4vw; 
             font-weight: 700; 
@@ -32,14 +48,14 @@
         }
         .fade-in { opacity: 1; }
         .fade-out { opacity: 0; }
-        .controls { display: flex; gap: 20px; justify-content: center; align-items: center; padding: 20px; background-color: rgba(0, 0, 0, 0.3); border-top: 2px solid #FFD700; width: 100%; }
-        button { padding: 12px 30px; font-size: 1.2vw; font-weight: bold; color: #004d40; background-color: #FFD700; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease; font-family: 'Cormorant Garamond', serif; }
-        button:hover { background-color: #FFC700; transform: scale(1.05); }
+        .controls { display: flex; gap: 20px; justify-content: center; align-items: center; padding: 20px; background-color: rgba(0, 0, 0, 0.3); border-top: 2px solid #D4B851; width: 100%; }
+        button { padding: 12px 30px; font-size: 1.2vw; font-weight: bold; color: #004d40; background-color: #D4B851; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease; font-family: Arial, sans-serif; }
+        button:hover { background-color: #C1A748; /* Tom mais escuro para o hover */ transform: scale(1.05); }
         button:active { transform: scale(0.95); }
         button:disabled { background-color: #999; cursor: not-allowed; opacity: 0.6; }
-        .info { color: #FFD700; font-size: 1vw; margin-left: 20px; }
-        .progress-bar { width: 300px; height: 8px; background-color: rgba(255, 215, 0, 0.3); border-radius: 5px; overflow: hidden; margin-left: 20px; }
-        .progress-fill { height: 100%; background-color: #FFD700; width: 0%; transition: width 0.1s linear; }
+        .info { color: #D4B851; font-size: 1vw; margin-left: 20px; }
+        .progress-bar { width: 300px; height: 8px; background-color: rgba(212, 184, 81, 0.3); /* Baseado no #D4B851 */ border-radius: 5px; overflow: hidden; margin-left: 20px; }
+        .progress-fill { height: 100%; background-color: #D4B851; width: 0%; transition: width 0.1s linear;},{find: }
     </style>
 </head>
 <body>
