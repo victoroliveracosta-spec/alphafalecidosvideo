@@ -9,12 +9,10 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: #004d40; color: #FFD700; font-family: 'Cormorant Garamond', serif; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; overflow: hidden; text-align: center; }
-        /* CORREÇÃO: Removendo opacity: 0 inicial para garantir que o primeiro nome seja visível */
         #name-container { 
             font-size: 4vw; 
             font-weight: 700; 
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
-            /* opacity: 0; REMOVIDO */
             transition: opacity 1s ease-in-out; 
             padding: 20px; 
             max-width: 90%; 
@@ -22,6 +20,15 @@
             display: flex; 
             align-items: center; 
             justify-content: center; 
+            flex-direction: column; /* Adicionado para alinhar nome e localização verticalmente */
+            line-height: 1.2; /* Ajuste para melhor espaçamento vertical */
+        }
+        #name-container .name {
+            font-size: 1em;
+        }
+        #name-container .location {
+            font-size: 0.5em; /* Localização menor */
+            opacity: 0.7;
         }
         .fade-in { opacity: 1; }
         .fade-out { opacity: 0; }
@@ -46,7 +53,8 @@
 
     <script>
         let names = [];
-        const durationPerName = 0,5 * 1000;
+        // CORREÇÃO: Usar ponto (.) como separador decimal em JavaScript (0.5 * 1000)
+        const durationPerName = 0.5 * 1000; 
         const transitionTime = 1000;
         const container = document.getElementById('name-container');
         const playBtn = document.getElementById('play-btn');
@@ -60,28 +68,67 @@
         let timeoutId = null;
         let transitionTimeoutId = null;
 
+        /**
+         * Processa a string de nome e localização para retornar um objeto estruturado.
+         * Ex: "NOME COMPLETO - Setor:1Jazigo:73Quadra:EUCALIPTOS"
+         * Retorna: { name: "NOME COMPLETO", location: "Setor: 1 | Jazigo: 73 | Quadra: EUCALIPTOS" }
+         */
+        function parseNameAndLocation(fullString) {
+            const parts = fullString.split(' - ');
+            const name = parts[0] || 'Nome Desconhecido';
+            let location = parts[1] || '';
+
+            // Adiciona espaços e barras para formatar a localização
+            location = location
+                .replace(/Setor:/g, 'Setor: ')
+                .replace(/Jazigo:/g, ' | Jazigo: ')
+                .replace(/Quadra:/g, ' | Quadra: ');
+
+            // Remove o primeiro " | " se existir
+            if (location.startsWith(' | ')) {
+                location = location.substring(3);
+            }
+
+            return { name, location };
+        }
+
+        // Função para exibir o nome e a localização no container
+        function displayCurrentName() {
+            const data = names[currentIndex];
+            const parsed = parseNameAndLocation(data);
+            
+            // Usar innerHTML para criar duas linhas (nome e localização)
+            container.innerHTML = `
+                <div class="name">${parsed.name}</div>
+                <div class="location">${parsed.location}</div>
+            `;
+        }
+
         // Carrega os nomes do arquivo JSON
-        fetch('names.json')
+        // CORREÇÃO: O arquivo names.json foi renomeado para names_data.json no sandbox para evitar confusão.
+        fetch('names.json') 
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erro ao carregar names.json: ' + response.statusText);
                 }
-                return response.json();
+                // CORREÇÃO: O JSON é um array de strings, não um objeto com a chave 'names'.
+                return response.json(); 
             })
             .then(data => {
-                names = data;
+                // O JSON já é o array de nomes
+                names = data; 
                 totalNamesEl.textContent = names.length;
                 playBtn.disabled = false;
                 
-                // Exibe o primeiro nome imediatamente (sem fade-in inicial)
+                // Exibe o primeiro nome imediatamente
                 if (names.length > 0) {
-                    container.textContent = names[0];
-                    container.style.opacity = 1; // Garante que o primeiro nome está visível
+                    currentIndex = 0; // Garante que o índice começa em 0
+                    displayCurrentName();
+                    container.style.opacity = 1; 
                 } else {
                     container.textContent = "Lista de nomes vazia.";
                 }
                 
-                // Garante que o Play está habilitado e Pause desabilitado
                 playBtn.disabled = false;
                 pauseBtn.disabled = true;
                 
@@ -91,35 +138,49 @@
                 container.textContent = "Erro ao carregar nomes. Verifique se o arquivo names.json está na mesma pasta.";
             });
 
-        function updateCounter() { currentNameNumber.textContent = currentIndex; }
-        function updateProgressBar() { progressFill.style.width = (currentIndex / names.length) * 100 + '%'; }
+        function updateCounter() { currentNameNumber.textContent = currentIndex + 1; } // +1 para exibição amigável
+        function updateProgressBar() { progressFill.style.width = ((currentIndex + 1) / names.length) * 100 + '%'; }
 
         function showNextName() {
             if (!isPlaying) return;
 
-            if (currentIndex >= names.length) {
-                container.textContent = "Em Memória de Todos os Falecidos";
-                container.classList.remove('fade-out');
-                container.classList.add('fade-in');
-                isPlaying = false;
-                playBtn.disabled = false;
-                pauseBtn.disabled = true;
+            // Se o índice atual for o último, paramos e exibimos a mensagem final
+            if (currentIndex >= names.length - 1) { 
+                // 1. Fade-out do último nome
+                container.classList.remove('fade-in');
+                container.classList.add('fade-out');
+
+                // 2. Mudar para a mensagem final após o tempo de transição
+                transitionTimeoutId = setTimeout(() => {
+                    container.innerHTML = "Em Memória de Todos os Falecidos";
+                    container.classList.remove('fade-out');
+                    container.classList.add('fade-in');
+                    isPlaying = false;
+                    playBtn.disabled = false;
+                    pauseBtn.disabled = true;
+                    currentNameNumber.textContent = names.length; // Atualiza contador para o total
+                    progressFill.style.width = '100%';
+                }, transitionTime);
+                
                 return;
             }
             
-            // 1. Fade-out do nome atual
+            // Avança para o próximo índice
+            currentIndex++;
+            
+            // 1. Fade-out do nome anterior
             container.classList.remove('fade-in');
             container.classList.add('fade-out');
 
             // 2. Mudar o nome e fazer fade-in após o tempo de transição
             transitionTimeoutId = setTimeout(() => {
-                container.textContent = names[currentIndex];
+                displayCurrentName();
                 container.classList.remove('fade-out');
                 container.classList.add('fade-in');
-                currentIndex++;
                 updateCounter();
                 updateProgressBar();
-                timeoutId = setTimeout(showNextName, durationPerName);
+                // Agenda o próximo showNextName
+                timeoutId = setTimeout(showNextName, durationPerName); 
             }, transitionTime);
         }
 
@@ -130,22 +191,15 @@
             playBtn.disabled = true;
             pauseBtn.disabled = false;
             
-            if (currentIndex >= names.length) { currentIndex = 0; }
-            
-            // Se estiver no início ou recomeçando
-            if (currentIndex === 0) {
-                container.textContent = names[currentIndex];
+            // Se já tiver terminado, recomeça do início
+            if (currentIndex >= names.length - 1) { 
+                currentIndex = -1; // -1 para que o showNextName comece no 0
+                container.classList.remove('fade-in');
                 container.classList.remove('fade-out');
-                container.classList.add('fade-in');
-                currentIndex++;
-                updateCounter();
-                updateProgressBar();
-                timeoutId = setTimeout(showNextName, durationPerName);
-            } else {
-                // Se estava pausado, o nome atual já está na tela, 
-                // então agendamos a transição para o próximo nome
-                showNextName();
             }
+            
+            // Inicia o ciclo
+            showNextName();
         }
 
         function pause() {
@@ -159,6 +213,10 @@
 
         playBtn.addEventListener('click', play);
         pauseBtn.addEventListener('click', pause);
+        
+        // Inicializa o contador e a barra de progresso
+        updateCounter();
+        updateProgressBar();
     </script>
 </body>
 </html>
