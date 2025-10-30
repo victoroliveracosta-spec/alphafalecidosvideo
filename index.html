@@ -1,297 +1,227 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homenagem Alphacampus</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homenagem Alphacampus</title>
     
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background-color: #004d40; 
-            background-image: url('background.jpeg'); 
-            background-size: contain; 
-            background-position: center; 
-            background-repeat: no-repeat; 
-            filter: none; 
-            color: #D4B851; 
-            font-family: Arial, sans-serif; 
-            height: 100vh; 
-            overflow: hidden; 
-            text-align: center; 
-            position: relative; 
-            /* Flexbox para manter a ordem e os botões no final */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between; 
-            align-items: center;
-        }
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+        background-color: #004d40; 
+        background-image: url('background.jpeg'); 
+        background-size: contain; 
+        background-position: center; 
+        background-repeat: no-repeat; 
+        color: #D4B851; 
+        font-family: Arial, sans-serif; 
+        height: 100vh; 
+        overflow: hidden; 
+        text-align: center; 
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; 
+        align-items: center;
+    }
 
-        /* Contêiner principal para o efeito "Céu Estrelado" */
-        #name-container { 
-            /* Ocupa a maior parte do espaço disponível */
-            flex-grow: 1; 
-            width: 100%;
-            position: relative; /* Para que as "estrelas" absolutas funcionem dentro dele */
-            overflow: hidden;
-            
-            /* Ajuste de margem para evitar sobreposição com o logo/imagem de fundo */
-            /* 15vh de margem superior e inferior para proteger as áreas de logo */
-            margin-top: 15vh; 
-            margin-bottom: 15vh; 
-            height: calc(100vh - 30vh - 80px); /* Altura total - margens - altura dos botões */
-        }
+    #name-container { 
+        flex-grow: 1; 
+        width: 100%;
+        position: relative; 
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+    }
 
-        /* Estilo para cada nome (estrela) */
-        .star-name {
-            position: absolute; /* Permite o posicionamento aleatório */
-            font-size: 2.5vw; /* Tamanho ajustado para o efeito */
-            font-weight: 700; 
-            color:  #D4B851; /* Verde Escuro solicitado */
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* Sombra branca para destaque */
-            opacity: 0; /* Começa invisível */
-            transition: opacity 1s ease-in-out;
-            white-space: nowrap; 
-            cursor: default;
-        }
+    .star-name {
+        position: absolute;
+        font-size: 2.8vw;
+        font-weight: 700; 
+        color: #D4B851;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        white-space: nowrap; 
+        cursor: default;
+    }
 
-        .star-name.visible {
-            opacity: 1;
-        }
-        
-        /* Animação de flutuação para cada estrela */
-        @keyframes star-float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); } 
-            100% { transform: translateY(0px); }
-        }
+    .star-name.visible {
+        opacity: 1;
+    }
+    
+    @keyframes star-float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); } 
+        100% { transform: translateY(0px); }
+    }
 
-        .star-name.animated {
-            animation: star-float 5s ease-in-out infinite alternate;
-        }
+    .star-name.animated {
+        animation: star-float 5s ease-in-out infinite alternate;
+    }
 
-        /* Estilos dos botões (mantidos na parte inferior) */
-        button { 
-            padding: 12px 30px; 
-            font-size: 1.2vw; 
-            font-weight: bold; 
-            color: #D4B851; 
-            background-color: #004d40; 
-            border: 2px solid #D4B851; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            transition: background-color 0.3s ease, transform 0.2s ease; 
-            font-family: Arial, sans-serif; 
-        }
-        button:hover { 
-            background-color: #00332b; 
-            transform: scale(1.05); 
-        }
-        button:active { transform: scale(0.95); }
-        button:disabled { background-color: #999; cursor: not-allowed; opacity: 0.6; }
+    button { 
+        padding: 12px 30px; 
+        font-size: 1.2vw; 
+        font-weight: bold; 
+        color: #D4B851; 
+        background-color: #004d40; 
+        border: 2px solid #D4B851; 
+        border-radius: 5px; 
+        cursor: pointer; 
+        transition: background-color 0.3s ease, transform 0.2s ease; 
+        font-family: Arial, sans-serif; 
+    }
+    button:hover { background-color: #00332b; transform: scale(1.05); }
+    button:active { transform: scale(0.95); }
+    button:disabled { background-color: #999; cursor: not-allowed; opacity: 0.6; }
 
-        #button-container {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: 20px 0; 
-            min-height: 50px; 
-            opacity: 1;
-            transition: opacity 0.3s ease;
-            pointer-events: auto;
-            order: 2; /* Garante que fique na parte inferior */
-        }
-        
-        .hidden-controls {
-            opacity: 0 !important; 
-            pointer-events: none !important;
-        }
+    #button-container {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 20px 0; 
+        min-height: 50px; 
+        opacity: 1;
+        transition: opacity 0.3s ease;
+        pointer-events: auto;
+    }
+    
+    .hidden-controls {
+        opacity: 0 !important; 
+        pointer-events: none !important;
+    }
 
-        #button-container:hover {
-            opacity: 1 !important; 
-            pointer-events: auto !important;
-        }
-        
-        #button-container button {
-            transition: none;
-        }
-    </style>
+    #button-container:hover {
+        opacity: 1 !important; 
+        pointer-events: auto !important;
+    }
+</style>
 </head>
 <body>
-    <!-- O container agora será a área onde os nomes "estrelas" aparecerão -->
     <div id="name-container">Carregando nomes...</div>
 
-    <!-- Container dos botões na parte de baixo -->
     <div id="button-container" class="hidden-controls">
         <button id="play-btn" disabled>▶ Iniciar Homenagem</button>
         <button id="pause-btn" disabled>⏸ Pausar</button>
         <button id="fullscreen-btn">⛶ Tela Cheia</button>
     </div>
 
-    <script>
-        let names = [];
-        const container = document.getElementById('name-container');
-        const playBtn = document.getElementById('play-btn');
-        const pauseBtn = document.getElementById('pause-btn');
-        const fullscreenBtn = document.getElementById('fullscreen-btn'); 
-        const buttonContainer = document.getElementById('button-container'); 
+<script>
+let names = [];
+const container = document.getElementById('name-container');
+const playBtn = document.getElementById('play-btn');
+const pauseBtn = document.getElementById('pause-btn');
+const fullscreenBtn = document.getElementById('fullscreen-btn'); 
+const buttonContainer = document.getElementById('button-container'); 
 
-        let isPlaying = false;
-        let timeoutId = null;
-        
-        // NOVO: Intervalo de tempo entre a criação de cada nome (3.0 segundos)
-        const creationInterval = 3000; 
-        // NOVO: Tempo que cada nome permanece na tela (15.0 segundos)
-        const displayDuration = 15000; 
+let isPlaying = false;
+let timeoutId = null;
 
-        /**
-         * Processa a string de nome e localização para retornar apenas o nome.
-         */
-        function parseNameAndLocation(fullString) {
-            const parts = fullString.split(' - ');
-            const name = parts[0] || 'Nome Desconhecido';
-            return { name, location: "" };
-        }
+const creationInterval = 3000; 
+const displayDuration = 15000; 
 
-        /**
-         * Função para criar uma "estrela" (nome) na área do container.
-         */
-        function createStar(name) {
-            const star = document.createElement("div");
-            star.className = "star-name";
-            star.textContent = name;
+function parseNameAndLocation(fullString) {
+    const parts = fullString.split(' - ');
+    const name = parts[0] || 'Nome Desconhecido';
+    return { name, location: "" };
+}
 
-            // Posicionamento aleatório DENTRO do #name-container
-            const containerWidth = container.offsetWidth;
-            const containerHeight = container.offsetHeight;
-            
-            // Posicionamento aleatório com margem para evitar cortes
-            const x = Math.random() * (containerWidth - 200) + 100; 
-            const y = Math.random() * (containerHeight - 50) + 25;
-            
-            star.style.left = `${x}px`;
-            star.style.top = `${y}px`;
+function createStar(name) {
+    const star = document.createElement("div");
+    star.className = "star-name";
+    star.textContent = name;
 
-            // Adiciona ao container
-            container.appendChild(star);
+    const containerWidth = container.offsetWidth;
+    const containerHeight = container.offsetHeight;
+    
+    // 🔹 Centralização: restringe a área de surgimento a 60% do centro da tela
+    const centerX = containerWidth / 2;
+    const centerY = containerHeight / 2;
+    const maxOffsetX = containerWidth * 0.3;
+    const maxOffsetY = containerHeight * 0.3;
 
-            // Animação de fade-in
-            setTimeout(() => {
-                star.classList.add("visible");
-                star.classList.add("animated");
-            }, 100);
+    const x = centerX + (Math.random() * 2 - 1) * maxOffsetX;
+    const y = centerY + (Math.random() * 2 - 1) * maxOffsetY;
 
-            // Remove a estrela após o tempo de exibição (displayDuration)
-            setTimeout(() => {
-                star.classList.remove("visible");
-                setTimeout(() => {
-                    if(container.contains(star)) {
-                        container.removeChild(star);
-                    }
-                }, 1000); // Espera a transição de fade-out (1 segundo)
-            }, displayDuration); 
-        }
+    star.style.left = `${x}px`;
+    star.style.top = `${y}px`;
 
-        /**
-         * Função para iniciar o "Céu Estrelado"
-         */
-        function startStarrySky() {
-            if (!isPlaying || names.length === 0) return;
+    container.appendChild(star);
 
-            // Pega um nome aleatório da lista
-            const randomIndex = Math.floor(Math.random() * names.length);
-            const nameData = names[randomIndex];
-            const { name } = parseNameAndLocation(nameData);
+    setTimeout(() => {
+        star.classList.add("visible", "animated");
+    }, 100);
 
-            // Cria a estrela
-            createStar(name);
+    setTimeout(() => {
+        star.classList.remove("visible");
+        setTimeout(() => {
+            if(container.contains(star)) container.removeChild(star);
+        }, 1000);
+    }, displayDuration); 
+}
 
-            // Cria a próxima estrela após o intervalo (creationInterval)
-            timeoutId = setTimeout(startStarrySky, creationInterval); 
-        }
+function startStarrySky() {
+    if (!isPlaying || names.length === 0) return;
 
-        // Carrega os nomes do arquivo JSON
-        fetch('names.json') 
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erro ao carregar names.json: ' + response.statusText);
-                }
-                return response.json(); 
-            })
-            .then(data => {
-                names = data; 
-                playBtn.disabled = false;
-                
-                if (names.length > 0) {
-                    container.textContent = ""; // Limpa a mensagem de "Carregando nomes..."
-                } else {
-                    container.textContent = "Lista de nomes vazia.";
-                }
-                
-                playBtn.disabled = false;
-                pauseBtn.disabled = true;
-            })
-            .catch(error => {
-                console.error("Erro ao carregar a lista de nomes:", error);
-                container.textContent = "Erro ao carregar nomes. Verifique se o arquivo names.json está na mesma pasta.";
-            });
+    const randomIndex = Math.floor(Math.random() * names.length);
+    const { name } = parseNameAndLocation(names[randomIndex]);
+    createStar(name);
 
-        // Função para mostrar os botões
-        function showButtons() {
-            buttonContainer.classList.remove('hidden-controls');
-        }
+    timeoutId = setTimeout(startStarrySky, creationInterval); 
+}
 
-        // Função para ocultar os botões
-        function hideButtons() {
-            buttonContainer.classList.add('hidden-controls');
-        }
+fetch('names.json') 
+    .then(r => r.json())
+    .then(data => {
+        names = data; 
+        playBtn.disabled = false;
+        container.textContent = "";
+    })
+    .catch(() => {
+        container.textContent = "Erro ao carregar nomes.";
+    });
 
-        // Função para alternar o modo de tela cheia
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-                fullscreenBtn.innerHTML = "⛶ Sair da Tela Cheia";
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                    fullscreenBtn.innerHTML = "⛶ Tela Cheia";
-                }
-            }
-        }
+function showButtons() { buttonContainer.classList.remove('hidden-controls'); }
+function hideButtons() { buttonContainer.classList.add('hidden-controls'); }
 
-        function play() {
-            if (isPlaying) return;
-            
-            isPlaying = true;
-            playBtn.disabled = true;
-            pauseBtn.disabled = false;
-            hideButtons(); 
-            
-            // Limpa qualquer timeout anterior
-            if (timeoutId) clearTimeout(timeoutId);
-            
-            // Inicia o ciclo de estrelas
-            startStarrySky();
-        }
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+        fullscreenBtn.innerHTML = "⛶ Sair da Tela Cheia";
+    } else {
+        document.exitFullscreen();
+        fullscreenBtn.innerHTML = "⛶ Tela Cheia";
+    }
+}
 
-        function pause() {
-            if (!isPlaying) return;
-            isPlaying = false;
-            playBtn.disabled = false;
-            pauseBtn.disabled = true;
-            showButtons(); 
-            
-            if (timeoutId) clearTimeout(timeoutId); 
-        }
+function play() {
+    if (isPlaying) return;
+    isPlaying = true;
+    playBtn.disabled = true;
+    pauseBtn.disabled = false;
+    hideButtons();
+    if (timeoutId) clearTimeout(timeoutId);
+    startStarrySky();
+}
 
-        playBtn.addEventListener('click', play);
-        pauseBtn.addEventListener('click', pause);
-        fullscreenBtn.addEventListener('click', toggleFullscreen); 
-        
-        // Mostra os botões inicialmente para permitir o primeiro play
-        showButtons();
-    </script>
+function pause() {
+    if (!isPlaying) return;
+    isPlaying = false;
+    playBtn.disabled = false;
+    pauseBtn.disabled = true;
+    showButtons();
+    if (timeoutId) clearTimeout(timeoutId);
+}
+
+playBtn.addEventListener('click', play);
+pauseBtn.addEventListener('click', pause);
+fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+showButtons();
+</script>
 </body>
 </html>
