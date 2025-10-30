@@ -4,17 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homenagem Alphacampus</title>
-  
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             background-color: #004d40; 
-            /* A imagem de fundo deve ser a fornecida pelo usuário, ajustei o nome */
-            background-image: url('background.jpeg'); 
+            background-image: url('FundoNomedosFalecidospraFinados.png'); 
             background-size: contain; 
             background-position: center; 
             background-repeat: no-repeat; 
-            filter: none; 
             color: #D4B851; 
             font-family: Arial, sans-serif; 
             height: 100vh; 
@@ -27,45 +25,39 @@
             align-items: center;
         }
 
-        /* Contêiner principal para o efeito "Céu Estrelado" */
+        /* Contêiner principal que ocupa o espaço central */
         #name-container { 
             flex-grow: 1; 
             width: 100%;
-            position: relative; 
+            position: relative; /* Necessário para o posicionamento absoluto do #name-area */
             overflow: hidden;
-            
-            /* Removendo margens e altura fixas para usar o #name-area */
             margin: 0; 
             height: 100%;
-            
-            /* Centraliza o container para que o #name-area fique corretamente posicionado */
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
-        /* NOVO: Área de posicionamento dos nomes, restrita à área verde da imagem */
+        /* Área de posicionamento dos nomes, ajustada para evitar os logos */
         #name-area {
-            position: relative; /* Para que os nomes sejam posicionados em relação a ele */
+            position: absolute;
+            /* Inicia 20% abaixo do topo para evitar o logo Alphacampus */
+            top: 20%; 
+            /* Inicia 30% a partir da esquerda para evitar o logo Alphacampus */
+            left: 30%; 
+            /* Largura de 45% para deixar uma margem de 25% à direita, evitando o logo 'raizes' */
+            width: 45%; 
+            /* Altura de 50% para deixar uma margem de 30% na base, evitando o logo 'raizes' */
+            height: 50%;
             
-            /* Ajuste das dimensões para a área verde (aproximadamente 85% de largura e 80% de altura) */
-            /* Estes valores são relativos ao #name-container, que está centralizado */
-            width: 85%;
-            height: 80%;
-            
-            /* Opcional: para visualizar a área de nomes */
+            /* Opcional: descomente a linha abaixo para visualizar a área de nomes */
             /* border: 1px solid red; */
         }
 
         /* Estilo para cada nome (estrela) */
         .star-name {
             position: absolute; 
-            /* Ajuste do tamanho da fonte para ser responsivo e legível */
-            font-size: 3.5vh; 
+            font-size: 2.5vh; 
             font-weight: 700; 
-            /* CORRIGIDO: Cor dourada (#D4B851) para aparecer em tela cheia */
             color: #D4B851; 
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Sombra escura para destaque */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
             opacity: 0; 
             transition: opacity 1s ease-in-out;
             white-space: nowrap; 
@@ -76,7 +68,6 @@
             opacity: 1;
         }
         
-        /* Animação de flutuação para cada estrela */
         @keyframes star-float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-10px); } 
