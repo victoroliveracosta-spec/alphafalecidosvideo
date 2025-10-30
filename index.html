@@ -47,7 +47,7 @@
             position: absolute; /* Permite o posicionamento aleatório */
             font-size: 2.5vw; /* Tamanho ajustado para o efeito */
             font-weight: 700; 
-            color: #D4B851; /* Verde Escuro solicitado */
+            color:  #D4B851; /* Verde Escuro solicitado */
             text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* Sombra branca para destaque */
             opacity: 0; /* Começa invisível */
             transition: opacity 1s ease-in-out;
@@ -140,6 +140,11 @@
 
         let isPlaying = false;
         let timeoutId = null;
+        
+        // NOVO: Intervalo de tempo entre a criação de cada nome (3.0 segundos)
+        const creationInterval = 3000; 
+        // NOVO: Tempo que cada nome permanece na tela (15.0 segundos)
+        const displayDuration = 15000; 
 
         /**
          * Processa a string de nome e localização para retornar apenas o nome.
@@ -159,7 +164,6 @@
             star.textContent = name;
 
             // Posicionamento aleatório DENTRO do #name-container
-            // Usamos offsetWidth/Height do container para garantir que fiquem dentro
             const containerWidth = container.offsetWidth;
             const containerHeight = container.offsetHeight;
             
@@ -179,15 +183,15 @@
                 star.classList.add("animated");
             }, 100);
 
-            // Remove a estrela após um tempo (10 segundos)
+            // Remove a estrela após o tempo de exibição (displayDuration)
             setTimeout(() => {
                 star.classList.remove("visible");
                 setTimeout(() => {
                     if(container.contains(star)) {
                         container.removeChild(star);
                     }
-                }, 1000); // Espera a transição de fade-out
-            }, 10000); 
+                }, 1000); // Espera a transição de fade-out (1 segundo)
+            }, displayDuration); 
         }
 
         /**
@@ -204,8 +208,8 @@
             // Cria a estrela
             createStar(name);
 
-            // Cria a próxima estrela após um intervalo (1.5 segundos)
-            timeoutId = setTimeout(startStarrySky, 1500); 
+            // Cria a próxima estrela após o intervalo (creationInterval)
+            timeoutId = setTimeout(startStarrySky, creationInterval); 
         }
 
         // Carrega os nomes do arquivo JSON
