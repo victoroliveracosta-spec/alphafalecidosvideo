@@ -8,120 +8,222 @@
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background-color: #004d40; 
-            background-image: url('background.jpeg'); 
-            background-size: contain; /* Tenta 'contain' para garantir que a imagem inteira apareça */
-            background-position: center; /* Centraliza a imagem */
-            background-repeat: no-repeat; /* Evita a repetição da imagem */
-            filter: none; /* Remove o filtro para garantir que a imagem apareça */
-            color: #D4B851; /* Cor Amarelo-Ouro extraída da imagem */
-            font-family: Arial, sans-serif; /* Mantido em Arial */ 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            overflow: hidden; 
-            text-align: center; 
-        }
-        #name-container { 
-            font-size: 4vw; 
-            font-weight: 700; 
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
-            transition: opacity 1s ease-in-out; 
-            padding: 20px; 
-            max-width: 90%; 
-            flex: 1; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            flex-direction: column; /* Adicionado para alinhar nome e localização verticalmente */
-            line-height: 1.2; /* Ajuste para melhor espaçamento vertical */
-        }
-        #name-container .name {
-            font-size: 1em;
-        }
-        #name-container .location {
-            font-size: 0.5em; /* Localização menor */
+	        body { 
+	            background-color: #004d40; 
+	            background-image: url('background.jpeg'); 
+	            background-size: contain; /* Tenta 'contain' para garantir que a imagem inteira apareça */
+	            background-position: center; /* Centraliza a imagem */
+	            background-repeat: no-repeat; /* Evita a repetição da imagem */
+	            filter: none; /* Remove o filtro para garantir que a imagem apareça */
+	            color: #D4B851; /* Cor Amarelo-Ouro extraída da imagem */
+	            font-family: Arial, sans-serif; /* Mantido em Arial */ 
+	            /* Removendo estilos de flexbox para que o #name-container (agora absoluto) funcione */
+	            height: 100vh; 
+	            overflow: hidden; 
+	            text-align: center; 
+	            position: relative; /* Para que o #name-container absoluto funcione */
+	        }
+		        #nam		        /* Contêiner principal para o efeito "Céu Estrelado" */
+		        #name-container { 
+		            position: absolute; /* Para que os nomes flutuem */
+		            top: 0;
+		            left: 0;
+		            width: 100%;
+		            height: 100%;
+		            overflow: hidden;
+		            /* Removendo estilos de centralização para permitir o posicionamento livre */
+		            display: block;
+		            padding: 0;
+		        }
+		
+		        /* Estilo para cada nome (estrela) */
+		        .star-name {
+		            position: absolute;
+		            font-size: 2vw; /* Tamanho menor para o efeito de estrela */
+		            font-weight: 700; 
+		            color: #D4B851;
+		            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); 
+		            opacity: 0; /* Começa invisível */
+		            transition: opacity 1s ease-in-out;
+		            white-space: nowrap; /* Evita quebra de linha */
+		            cursor: default;
+		        }
+		
+		        .star-name.visible {
+		            opacity: 1;
+		        }
+		        
+		        /* Animação de flutuação para cada estrela */
+		        @keyframes star-float {
+		            0% { transform: translateY(0px); }
+		            50% { transform: translateY(-5px); }
+		            100% { transform: translateY(0px); }
+		        }
+		
+		        .star-name.animated {
+		            animation: star-float 5s ease-in-out infinite alternate;
+		        }nor */
             opacity: 0.7;
         }
         .fade-in { opacity: 1; }
-        .fade-out { opacity: 0; }
-        .controls { display: flex; gap: 20px; justify-content: center; align-items: center; padding: 20px; background-color: rgba(0, 0, 0, 0.3); border-top: 2px solid #D4B851; width: 100%; }
-        button { padding: 12px 30px; font-size: 1.2vw; font-weight: bold; color: #004d40; background-color: #D4B851; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease; font-family: Arial, sans-serif; }
-        button:hover { background-color: #C1A748; /* Tom mais escuro para o hover */ transform: scale(1.05); }
-        button:active { transform: scale(0.95); }
-        button:disabled { background-color: #999; cursor: not-allowed; opacity: 0.6; }
-        .info { color: #D4B851; font-size: 1vw; margin-left: 20px; }
-        .progress-bar { width: 300px; height: 8px; background-color: rgba(212, 184, 81, 0.3); /* Baseado no #D4B851 */ border-radius: 5px; overflow: hidden; margin-left: 20px; }
-        .progress-fill { height: 100%; background-color: #D4B851; width: 0%; transition: width 0.1s linear;},{find: }
+	        .fade-out { opacity: 0; }
+	
+	        /* Animação de Flutuação (Dança) */
+	        @keyframes float {
+	            0% { transform: translateY(0); }
+	            50% { transform: translateY(-5px); } /* Move 5px para cima */
+	            100% { transform: translateY(0); }
+	        }
+	
+		        button { padding: 12px 30px; font-size: 1.2vw; font-weight: bold; color: #004d40; background-color: #D4B851; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease; font-family: Arial, sans-serif; }
+	        button:hover { background-color: #C1A748; /* Tom mais escuro para o hover */ transform: scale(1.05); }
+	        button:active { transform: scale(0.95); }
+	        button:disabled { background-color: #999; cursor: not-allowed; opacity: 0.6; }
+	
+	        /* Novos estilos para o container dos botões, que agora será o único elemento na parte inferior */
+		        #button-container {
+		            display: flex;
+		            gap: 20px;
+		            justify-content: center;
+		            align-items: center;
+		            width: 100%;
+		            padding-bottom: 20px;
+		            min-height: 50px; 
+		            /* Estilos de visibilidade controlados pela classe hidden-controls e hover */
+		            opacity: 1;
+		            transition: opacity 0.3s ease;
+		            pointer-events: auto;
+		        }
+		        
+		        .hidden-controls {
+		            opacity: 0 !important; /* Força a opacidade para 0 */
+		            pointer-events: none !important;
+		        }
+
+		        #button-container:hover {
+		            opacity: 1 !important; /* Força a opacidade para 1 no hover */
+		            pointer-events: auto !important;
+		        }
+		        
+		        /* Garante que os botões em si não tenham transições desnecessárias */
+		        #button-container button {
+		            transition: none;
+		        }
+	        
     </style>
 </head>
 <body>
-    <div id="name-container">Carregando nomes...</div>
-    <div class="controls">
-        <button id="play-btn" disabled>▶ Play</button>
-        <button id="pause-btn" disabled>⏸ Pause</button>
-        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-        <div class="info"><span id="current-name-number">0</span> / <span id="total-names">0</span></div>
-    </div>
-
-    <script>
+		    <div id="name-container">Carregando nomes...</div>
+			        <div id="button-container" class="hidden-controls">
+			            <button id="play-btn" disabled>▶ Play</button>
+			            <button id="pause-btn" disabled>⏸ Pause</button>
+			            <button id="fullscreen-btn">⛶ Tela Cheia</button>
+		        </div>
+		    <script>
         let names = [];
         // CORREÇÃO: Usar ponto (.) como separador decimal em JavaScript (0.5 * 1000)
         const durationPerName = 0.5 * 1000; 
         const transitionTime = 1000;
-        const container = document.getElementById('name-container');
-        const playBtn = document.getElementById('play-btn');
-        const pauseBtn = document.getElementById('pause-btn');
-        const progressFill = document.getElementById('progress-fill');
-        const currentNameNumber = document.getElementById('current-name-number');
-        const totalNamesEl = document.getElementById('total-names');
+	        const container = document.getElementById('name-container');
+	        const playBtn = document.getElementById('play-btn');
+	        const pauseBtn = document.getElementById('pause-btn');
+	        const fullscreenBtn = document.getElementById('fullscreen-btn'); // Novo botão de tela cheia
+	        const buttonContainer = document.getElementById('button-container'); // Novo elemento container dos botões
+	        // const progressFill = document.getElementById('progress-fill'); // Removido
+	        // const currentNameNumber = document.getElementById('current-name-number'); // Removido
+	        // const totalNamesEl = document.getElementById('total-names'); // Removido
 
         let currentIndex = 0;
         let isPlaying = false;
         let timeoutId = null;
         let transitionTimeoutId = null;
 
-        /**
-         * Processa a string de nome e localização para retornar um objeto estruturado.
-         * Ex: "NOME COMPLETO - Setor:1Jazigo:73Quadra:EUCALIPTOS"
-         * Retorna: { name: "NOME COMPLETO", location: "Setor: 1 | Jazigo: 73 | Quadra: EUCALIPTOS" }
-         */
-        function parseNameAndLocation(fullString) {
-            const parts = fullString.split(' - ');
-            const name = parts[0] || 'Nome Desconhecido';
-            let location = parts[1] || '';
+	        /**
+	         * Processa a string de nome e localização para retornar apenas o nome.
+	         * Ex: "NOME COMPLETO - Setor:1Jazigo:73Quadra:EUCALIPTOS"
+	         * Retorna: { name: "NOME COMPLETO", location: "" }
+	         */
+	        function parseNameAndLocation(fullString) {
+	            const parts = fullString.split(' - ');
+	            const name = parts[0] || 'Nome Desconhecido';
+	            // A localização é removida conforme solicitação do usuário
+	            return { name, location: "" };
+	        }
 
-            // Adiciona espaços e barras para formatar a localização
-            location = location
-                .replace(/Setor:/g, 'Setor: ')
-                .replace(/Jazigo:/g, ' | Jazigo: ')
-                .replace(/Quadra:/g, ' | Quadra: ');
-
-            // Remove o primeiro " | " se existir
-            if (location.startsWith(' | ')) {
-                location = location.substring(3);
-            }
-
-            return { name, location };
-        }
-
-        // Função para exibir o nome e a localização no container
-        function displayCurrentName() {
-            const data = names[currentIndex];
-            const parsed = parseNameAndLocation(data);
-            
-            // Usar innerHTML para criar duas linhas (nome e localização)
-            container.innerHTML = `
-                <div class="name">${parsed.name}</div>
-                <div class="location">${parsed.location}</div>
-            `;
-        }
-
-        // Carrega os nomes do arquivo JSON
-        // CORREÇÃO: O arquivo names.json foi renomeado para names_data.json no sandbox para evitar confusão.
+		        // Variável para controlar o timeout do efeito de digitação
+		        let typingTimeoutId = null;
+		        
+		        /**
+		         * Função para exibir o nome e a localização com efeito de máquina de escrever.
+		         * @param {string} nameElement - O elemento HTML a ser atualizado (div.name ou div.location).
+		         * @param {string} text - O texto completo a ser digitado.
+		         * @param {number} delay - O atraso em milissegundos entre cada caractere.
+		         * @param {function} callback - Função a ser chamada quando a digitação estiver completa.
+		         */
+		        function typeEffect(element, text, delay, callback) {
+		            let i = 0;
+		            element.textContent = ''; // Limpa o conteúdo
+		
+		            function type() {
+		                if (i < text.length) {
+		                    element.textContent += text.charAt(i);
+		                    i++;
+		                    typingTimeoutId = setTimeout(type, delay);
+		                } else {
+		                    if (callback) callback();
+		                }
+		            }
+		            type();
+		        }
+		
+					        // Função para criar uma "estrela" (nome) na tela
+			        function createStar(name) {
+			            const star = document.createElement("div");
+			            star.className = "star-name";
+			            star.textContent = name;
+			
+			            // Posicionamento aleatório
+			            const x = Math.random() * (window.innerWidth - 200) + 100; // Evita as bordas
+			            const y = Math.random() * (window.innerHeight - 100) + 50;
+			            star.style.left = `${x}px`;
+			            star.style.top = `${y}px`;
+			
+			            // Adiciona ao container
+			            container.appendChild(star);
+			
+			            // Animação de fade-in
+			            setTimeout(() => {
+			                star.classList.add("visible");
+			                star.classList.add("animated");
+			            }, 100);
+			
+			            // Remove a estrela após um tempo para evitar sobrecarga
+			            setTimeout(() => {
+			                star.classList.remove("visible");
+			                setTimeout(() => {
+			                    container.removeChild(star);
+			                }, 1000); // Espera a transição de fade-out
+			            }, 10000); // 10 segundos na tela
+			        }
+			
+			        // Função para iniciar o "Céu Estrelado"
+			        function startStarrySky() {
+			            if (!isPlaying) return;
+			
+			            // Pega um nome aleatório da lista
+			            const randomIndex = Math.floor(Math.random() * names.length);
+			            const nameData = names[randomIndex];
+			            const { name } = parseNameAndLocation(nameData);
+			
+			            // Cria a estrela
+			            createStar(name);
+			
+			            // Cria a próxima estrela após um intervalo
+			            timeoutId = setTimeout(startStarrySky, 1500); // A cada 1.5 segundos
+			        }
+		
+		        // Carrega os nomes do arquivo JSON
+	        
         fetch('names.json') 
             .then(response => {
                 if (!response.ok) {
@@ -132,107 +234,84 @@
             })
             .then(data => {
                 // O JSON já é o array de nomes
-                names = data; 
-                totalNamesEl.textContent = names.length;
-                playBtn.disabled = false;
+	                names = data; 
+	                // totalNamesEl.textContent = names.length; // Removido
+	                playBtn.disabled = false;
                 
-                // Exibe o primeiro nome imediatamente
-                if (names.length > 0) {
-                    currentIndex = 0; // Garante que o índice começa em 0
-                    displayCurrentName();
-                    container.style.opacity = 1; 
-                } else {
-                    container.textContent = "Lista de nomes vazia.";
-                }
-                
-                playBtn.disabled = false;
-                pauseBtn.disabled = true;
-                
-            })
+	                // Exibe o primeiro nome imediatamente
+	                if (names.length > 0) {
+	                    currentIndex = 0; // Garante que o índice começa em 0
+	                    // displayCurrentName(); // Não chama aqui, pois o play() fará isso.
+	                    container.style.opacity = 1; 
+	                } else {
+	                container.textContent = "Lista de nomes vazia.";
+	                }
+	                
+	                playBtn.disabled = false;
+	                pauseBtn.disabled = true;
+	                
+	            })
             .catch(error => {
                 console.error("Erro ao carregar a lista de nomes:", error);
                 container.textContent = "Erro ao carregar nomes. Verifique se o arquivo names.json está na mesma pasta.";
-            });
+	            });
+	
+		        // Funções de atualização de contador e barra de progresso removidas.
+		
+		        // Função para mostrar os botões (remover a classe de ocultação)
+		        function showButtons() {
+		            buttonContainer.classList.remove('hidden-controls');
+		        }
+		
+		        // Função para ocultar os botões (adicionar a classe de ocultação)
+		        function hideButtons() {
+		            buttonContainer.classList.add('hidden-controls');
+		        }
+	
+	        // Função para alternar o modo de tela cheia
+	        function toggleFullscreen() {
+	            if (!document.fullscreenElement) {
+	                document.documentElement.requestFullscreen();
+	                fullscreenBtn.innerHTML = "⛶ Sair da Tela Cheia";
+	            } else {
+	                if (document.exitFullscreen) {
+	                    document.exitFullscreen();
+	                    fullscreenBtn.innerHTML = "⛶ Tela Cheia";
+	                }
+	            }
+	        }
+	
 
-        function updateCounter() { currentNameNumber.textContent = currentIndex + 1; } // +1 para exibição amigável
-        function updateProgressBar() { progressFill.style.width = ((currentIndex + 1) / names.length) * 100 + '%'; }
 
-        function showNextName() {
-            if (!isPlaying) return;
+		        function play() {
+	            if (isPlaying) return;
+	            
+	            isPlaying = true;
+	            playBtn.disabled = true;
+	            pauseBtn.disabled = false;
+	            hideButtons(); // Oculta os botões após o play
+	            
+	            // Limpa o container de nomes antigos
+	            container.innerHTML = 		            
+	            // Inicia o ciclo de estrelas
+	            startStarrySky();
+	        }
+			        function pause() {
+			            if (!isPlaying) return;
+			            isPlaying = false;
+			            playBtn.disabled = false;
+			            pauseBtn.disabled = true;
+			            showButtons(); // Mostra os botões ao pausar para que o usuário possa dar play novamente
+			            clearTimeout(timeoutId); // Para o ciclo de criação de estrelas
+			            // Não precisa mais de transitionTimeoutId e typingTimeoutId
+			        }
 
-            // Se o índice atual for o último, paramos e exibimos a mensagem final
-            if (currentIndex >= names.length - 1) { 
-                // 1. Fade-out do último nome
-                container.classList.remove('fade-in');
-                container.classList.add('fade-out');
-
-                // 2. Mudar para a mensagem final após o tempo de transição
-                transitionTimeoutId = setTimeout(() => {
-                    container.innerHTML = "Em Memória de Todos os Falecidos";
-                    container.classList.remove('fade-out');
-                    container.classList.add('fade-in');
-                    isPlaying = false;
-                    playBtn.disabled = false;
-                    pauseBtn.disabled = true;
-                    currentNameNumber.textContent = names.length; // Atualiza contador para o total
-                    progressFill.style.width = '100%';
-                }, transitionTime);
-                
-                return;
-            }
-            
-            // Avança para o próximo índice
-            currentIndex++;
-            
-            // 1. Fade-out do nome anterior
-            container.classList.remove('fade-in');
-            container.classList.add('fade-out');
-
-            // 2. Mudar o nome e fazer fade-in após o tempo de transição
-            transitionTimeoutId = setTimeout(() => {
-                displayCurrentName();
-                container.classList.remove('fade-out');
-                container.classList.add('fade-in');
-                updateCounter();
-                updateProgressBar();
-                // Agenda o próximo showNextName
-                timeoutId = setTimeout(showNextName, durationPerName); 
-            }, transitionTime);
-        }
-
-        function play() {
-            if (isPlaying) return;
-            
-            isPlaying = true;
-            playBtn.disabled = true;
-            pauseBtn.disabled = false;
-            
-            // Se já tiver terminado, recomeça do início
-            if (currentIndex >= names.length - 1) { 
-                currentIndex = -1; // -1 para que o showNextName comece no 0
-                container.classList.remove('fade-in');
-                container.classList.remove('fade-out');
-            }
-            
-            // Inicia o ciclo
-            showNextName();
-        }
-
-        function pause() {
-            if (!isPlaying) return;
-            isPlaying = false;
-            playBtn.disabled = false;
-            pauseBtn.disabled = true;
-            clearTimeout(timeoutId);
-            clearTimeout(transitionTimeoutId);
-        }
-
-        playBtn.addEventListener('click', play);
-        pauseBtn.addEventListener('click', pause);
-        
-        // Inicializa o contador e a barra de progresso
-        updateCounter();
-        updateProgressBar();
-    </script>
+	        playBtn.addEventListener('click', play);
+	        pauseBtn.addEventListener('click', pause);
+	        fullscreenBtn.addEventListener('click', toggleFullscreen); // Adiciona listener para o botão de tela cheia
+	        
+				        // Mostra os botões inicialmente para permitir o primeiro play
+				        showButtons();
+	    </script>
 </body>
 </html>
