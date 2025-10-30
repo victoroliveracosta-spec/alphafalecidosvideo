@@ -45,11 +45,10 @@
         transition: opacity 1s ease-in-out;
         white-space: nowrap; 
         cursor: default;
+        pointer-events: none;
     }
 
-    .star-name.visible {
-        opacity: 1;
-    }
+    .star-name.visible { opacity: 1; }
     
     @keyframes star-float {
         0% { transform: translateY(0px); }
@@ -121,49 +120,87 @@ const buttonContainer = document.getElementById('button-container');
 let isPlaying = false;
 let timeoutId = null;
 
+// Configurações de tempo
 const creationInterval = 3000; 
 const displayDuration = 15000; 
 
+// Armazena as posições atuais (para evitar sobreposição)
+let activeStars = [];
+
+// Extrai nome (sem localização)
 function parseNameAndLocation(fullString) {
     const parts = fullString.split(' - ');
     const name = parts[0] || 'Nome Desconhecido';
-    return { name, location: "" };
+    return { name };
 }
 
+// Verifica se um novo nome sobrepõe outro
+function isOverlapping(x, y, width, height) {
+    for (const star of activeStars) {
+        const rect = star.getBoundingClientRect();
+        const buffer = 20; // espaço mínimo entre nomes
+        if (
+            x < rect.left + rect.width + buffer &&
+            x + width + buffer > rect.left &&
+            y < rect.top + rect.height + buffer &&
+            y + height + buffer > rect.top
+        ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Cria uma estrela (nome) sem sobreposição
 function createStar(name) {
     const star = document.createElement("div");
     star.className = "star-name";
     star.textContent = name;
+    container.appendChild(star);
 
-    const containerWidth = container.offsetWidth;
-    const containerHeight = container.offsetHeight;
-    
-    // 🔹 Centralização: restringe a área de surgimento a 60% do centro da tela
+    const containerRect = container.getBoundingClientRect();
+    const containerWidth = containerRect.width;
+    const containerHeight = containerRect.height;
+
+    // Área central (60% da tela)
     const centerX = containerWidth / 2;
     const centerY = containerHeight / 2;
     const maxOffsetX = containerWidth * 0.3;
     const maxOffsetY = containerHeight * 0.3;
 
-    const x = centerX + (Math.random() * 2 - 1) * maxOffsetX;
-    const y = centerY + (Math.random() * 2 - 1) * maxOffsetY;
+    // Calcula largura e altura do texto
+    const tempRect = star.getBoundingClientRect();
+    const width = tempRect.width;
+    const height = tempRect.height;
+
+    let x, y, tries = 0;
+    do {
+        x = centerX + (Math.random() * 2 - 1) * maxOffsetX - width / 2;
+        y = centerY + (Math.random() * 2 - 1) * maxOffsetY - height / 2;
+        tries++;
+        if (tries > 30) break; // evita loop infinito
+    } while (isOverlapping(x, y, width, height));
 
     star.style.left = `${x}px`;
     star.style.top = `${y}px`;
 
-    container.appendChild(star);
+    // Mostra o nome
+    setTimeout(() => star.classList.add("visible", "animated"), 100);
+    activeStars.push(star);
 
-    setTimeout(() => {
-        star.classList.add("visible", "animated");
-    }, 100);
-
+    // Remove após tempo
     setTimeout(() => {
         star.classList.remove("visible");
         setTimeout(() => {
-            if(container.contains(star)) container.removeChild(star);
+            if (container.contains(star)) {
+                container.removeChild(star);
+                activeStars = activeStars.filter(s => s !== star);
+            }
         }, 1000);
     }, displayDuration); 
 }
 
+// Ciclo principal
 function startStarrySky() {
     if (!isPlaying || names.length === 0) return;
 
@@ -174,10 +211,11 @@ function startStarrySky() {
     timeoutId = setTimeout(startStarrySky, creationInterval); 
 }
 
-fetch('names.json') 
+// Carrega lista
+fetch('names.json')
     .then(r => r.json())
     .then(data => {
-        names = data; 
+        names = data;
         playBtn.disabled = false;
         container.textContent = "";
     })
