@@ -1,336 +1,377 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Homenagem Alphacampus</title>
-    
-<style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { 
-        background-color: #004d40; 
-        background-image: url('background.jpeg'); /* Ajuste para o nome correto se necessário */
-        background-size: contain; 
-        background-position: center; 
-        background-repeat: no-repeat; 
-        color: #D4B851; 
-        font-family: Arial, sans-serif; 
-        height: 100vh; 
-        overflow: hidden; 
-        text-align: center; 
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between; 
-        align-items: center;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homenagem Alphacampus</title>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: #004d40; 
+            /* A imagem de fundo deve ser a fornecida pelo usuário, ajustei o nome */
+            background-image: url('FundoNomedosFalecidospraFinados.png'); 
+            background-size: contain; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            filter: none; 
+            color: #D4B851; 
+            font-family: Arial, sans-serif; 
+            height: 100vh; 
+            overflow: hidden; 
+            text-align: center; 
+            position: relative; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; 
+            align-items: center;
+        }
 
-    #name-container { 
-        flex-grow: 1; 
-        width: 100%;
-        position: relative; /* Contexto de posicionamento para os nomes */
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0 auto;
-    }
+        /* Contêiner principal para o efeito "Céu Estrelado" */
+        #name-container { 
+            flex-grow: 1; 
+            width: 100%;
+            position: relative; 
+            overflow: hidden;
+            
+            /* Removendo margens e altura fixas para usar o #name-area */
+            margin: 0; 
+            height: 100%;
+            
+            /* Centraliza o container para que o #name-area fique corretamente posicionado */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .star-name {
-        position: absolute;
-        font-size: 2.8vw;
-        font-weight: 700; 
-        color: #D4B851;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-        opacity: 0;
-        transition: opacity 1s ease-in-out;
-        white-space: nowrap; 
-        cursor: default;
-        pointer-events: none;
-        /* Move o elemento para que (top, left) seja o seu centro */
-        transform: translate(-50%, -50%); 
-    }
+        /* NOVO: Área de posicionamento dos nomes, restrita à área verde da imagem */
+        #name-area {
+            position: relative; /* Para que os nomes sejam posicionados em relação a ele */
+            
+            /* Ajuste das dimensões para a área verde (aproximadamente 85% de largura e 80% de altura) */
+            /* Estes valores são relativos ao #name-container, que está centralizado */
+            width: 85%;
+            height: 80%;
+            
+            /* Opcional: para visualizar a área de nomes */
+            /* border: 1px solid red; */
+        }
 
-    .star-name.visible { opacity: 1; }
-    
-    @keyframes star-float {
-        0% { transform: translate(-50%, -50%) translateY(0px); }
-        50% { transform: translate(-50%, -50%) translateY(-10px); } 
-        100% { transform: translate(-50%, -50%) translateY(0px); }
-    }
+        /* Estilo para cada nome (estrela) */
+        .star-name {
+            position: absolute; 
+            /* Ajuste do tamanho da fonte para ser responsivo e legível */
+            font-size: 2.5vh; 
+            font-weight: 700; 
+            /* CORRIGIDO: Cor dourada (#D4B851) para aparecer em tela cheia */
+            color: #D4B851; 
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Sombra escura para destaque */
+            opacity: 0; 
+            transition: opacity 1s ease-in-out;
+            white-space: nowrap; 
+            cursor: default;
+        }
 
-    .star-name.animated {
-        animation: star-float 5s ease-in-out infinite alternate;
-    }
+        .star-name.visible {
+            opacity: 1;
+        }
+        
+        /* Animação de flutuação para cada estrela */
+        @keyframes star-float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); } 
+            100% { transform: translateY(0px); }
+        }
 
-    button { 
-        padding: 12px 30px; 
-        font-size: 1.2vw; 
-        font-weight: bold; 
-        color: #D4B851; 
-        background-color: #004d40; 
-        border: 2px solid #D4B851; 
-        border-radius: 5px; 
-        cursor: pointer; 
-        transition: background-color 0.3s ease, transform 0.2s ease; 
-        font-family: Arial, sans-serif; 
-    }
-    button:hover { background-color: #00332b; transform: scale(1.05); }
-    button:active { transform: scale(0.95); }
-    button:disabled { background-color: #999; cursor: not-allowed; opacity: 0.6; }
+        .star-name.animated {
+            animation: star-float 5s ease-in-out infinite alternate;
+        }
 
-    #button-container {
-        display: flex;
-        gap: 20px;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        padding: 20px 0; 
-        min-height: 50px; 
-        opacity: 1;
-        transition: opacity 0.3s ease;
-        pointer-events: auto;
-    }
-    
-    .hidden-controls {
-        opacity: 0 !important; 
-        pointer-events: none !important;
-    }
+        /* Estilos dos botões */
+        button { 
+            padding: 12px 30px; 
+            font-size: 1.2vw; 
+            font-weight: bold; 
+            color: #D4B851; 
+            background-color: #004d40; 
+            border: 2px solid #D4B851; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            transition: background-color 0.3s ease, transform 0.2s ease; 
+            font-family: Arial, sans-serif; 
+        }
+        button:hover { 
+            background-color: #00332b; 
+            transform: scale(1.05); 
+        }
+        button:active { transform: scale(0.95); }
+        button:disabled { background-color: #999; cursor: not-allowed; opacity: 0.6; }
 
-    #button-container:hover {
-        opacity: 1 !important; 
-        pointer-events: auto !important;
-    }
-</style>
+        #button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 20px 0; 
+            min-height: 50px; 
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            pointer-events: auto;
+            order: 2; 
+        }
+        
+        .hidden-controls {
+            opacity: 0 !important; 
+            pointer-events: none !important;
+        }
+
+        #button-container:hover {
+            opacity: 1 !important; 
+            pointer-events: auto !important;
+        }
+        
+        #button-container button {
+            transition: none;
+        }
+    </style>
 </head>
 <body>
-    <div id="name-container">Carregando nomes...</div>
+    <!-- O container principal agora envolve o #name-area -->
+    <div id="name-container">
+        <!-- NOVO: Área onde os nomes serão posicionados -->
+        <div id="name-area">Carregando nomes...</div>
+    </div>
 
-    <div id="button-container" class="hidden-controls">
-        <button id="play-btn" disabled>▶ Iniciar Homenagem</button>
-        <button id="pause-btn" disabled>⏸ Pausar</button>
-        <button id="fullscreen-btn">⛶ Tela Cheia</button>
-    </div>
+    <!-- Container dos botões na parte de baixo -->
+    <div id="button-container" class="hidden-controls">
+        <button id="play-btn" disabled>▶ Iniciar Homenagem</button>
+        <button id="pause-btn" disabled>⏸ Pausar</button>
+        <button id="fullscreen-btn">⛶ Tela Cheia</button>
+    </div>
 
-<script>
-let names = [];
-const container = document.getElementById('name-container');
-const playBtn = document.getElementById('play-btn');
-const pauseBtn = document.getElementById('pause-btn');
-const fullscreenBtn = document.getElementById('fullscreen-btn'); 
-const buttonContainer = document.getElementById('button-container'); 
+    <script>
+        let names = [];
+        // CORRIGIDO: O container agora é o #name-area
+        const container = document.getElementById('name-area'); 
+        const playBtn = document.getElementById('play-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const fullscreenBtn = document.getElementById('fullscreen-btn'); 
+        const buttonContainer = document.getElementById('button-container'); 
 
-let isPlaying = false;
-let timeoutId = null;
-
-// Configurações de tempo
-const creationInterval = 3000; 
-const displayDuration = 15000; 
-
-// Armazena as *posições relativas* e dimensões (para evitar sobreposição)
-let activeStars = [];
-const BUFFER = 25; // Espaço mínimo entre nomes (pixels)
-
-// Extrai nome (sem localização)
-function parseNameAndLocation(fullString) {
-    const parts = fullString.split(' - ');
-    const name = parts[0] || 'Nome Desconhecido';
-    return { name };
-}
-
-/**
- * Calcula a área ocupada pela imagem de fundo (background.jpeg) no modo 'contain'.
- */
-function getBackgroundAreaMetrics() {
-    const bodyWidth = document.body.clientWidth;
-    const bodyHeight = document.body.clientHeight;
-    
-    // DIMENSÕES ORIGINAIS DO SEU BACKGROUND.JPEG
-    const originalImageWidth = 1365; 
-    const originalImageHeight = 768; 
-
-    const ratioContainer = bodyWidth / bodyHeight;
-    const ratioImage = originalImageWidth / originalImageHeight;
-
-    let bgWidth, bgHeight, bgX, bgY;
-
-    if (ratioContainer > ratioImage) {
-        // Altura do container é o limitador. A imagem se encaixa verticalmente.
-        bgHeight = bodyHeight;
-        bgWidth = bgHeight * ratioImage;
-        bgX = (bodyWidth - bgWidth) / 2;
-        bgY = 0;
-    } else {
-        // Largura do container é o limitador. A imagem se encaixa horizontalmente.
-        bgWidth = bodyWidth;
-        bgHeight = bgWidth / ratioImage;
-        bgX = 0;
-        bgY = (bodyHeight - bgHeight) / 2;
-    }
-
-    // Retorna a área da imagem relativa à tela inteira (body)
-    return {
-        left: bgX, 
-        top: bgY, 
-        width: bgWidth,
-        height: bgHeight
-    };
-}
-
-
-// Verifica se um novo nome sobrepõe outro usando POSIÇÕES RELATIVAS
-function isOverlapping(newX, newY, newWidth, newHeight) {
-    for (const starData of activeStars) {
-        // Usa as propriedades relativas armazenadas
-        const { x, y, width, height } = starData; 
-        
-        // Usa BUFFER para criar uma margem de segurança ao redor de cada nome
-        if (
-            newX < x + width / 2 + BUFFER &&
-            newX > x - width / 2 - BUFFER &&
-            newY < y + height / 2 + BUFFER &&
-            newY > y - height / 2 - BUFFER
-        ) {
-            return true;
-        }
-    }
-    return false;
-}
-
-// Cria uma estrela (nome) sem sobreposição, dentro da área do background
-function createStar(name) {
-    const star = document.createElement("div");
-    star.className = "star-name";
-    star.textContent = name;
-    container.appendChild(star);
-    
-    // 1. Obtém as dimensões da ÁREA OCUPADA PELO BACKGROUND
-    const bgMetrics = getBackgroundAreaMetrics(); 
-
-    // 2. Definir a Área de Distribuição *DENTRO* da imagem: 80% do Background
-    const distributionWidth = bgMetrics.width * 0.8; 
-    const distributionHeight = bgMetrics.height * 0.8;
-    // Posição de Início do Posicionamento (10% de margem no topo/esquerda)
-    const startX = bgMetrics.left + (bgMetrics.width * 0.1); 
-    const startY = bgMetrics.top + (bgMetrics.height * 0.1); 
-
-    // Calcula largura e altura do texto APÓS adicionar ao DOM
-    const tempRect = star.getBoundingClientRect();
-    const width = tempRect.width;
-    const height = tempRect.height;
-
-    let x, y, tries = 0;
-    let isPlaceable = false;
-
-    do {
-        // Posição X e Y calculada *no centro* da área do Background
-        x = startX + Math.random() * distributionWidth;
-        y = startY + Math.random() * distributionHeight;
-        tries++;
+        let isPlaying = false;
+        let timeoutId = null;
         
-        // Verifica sobreposição usando o centro (x, y) e as dimensões (width, height)
-        if (!isOverlapping(x, y, width, height)) {
-            isPlaceable = true;
+        // Armazena as posições atuais (para evitar sobreposição)
+        let activeStars = [];
+
+        // Intervalo de tempo entre a criação de cada nome (3.0 segundos)
+        const creationInterval = 3000; 
+        // Tempo que cada nome permanece na tela (15.0 segundos)
+        const displayDuration = 15000; 
+
+        /**
+         * Processa a string de nome e localização para retornar apenas o nome.
+         */
+        function parseNameAndLocation(fullString) {
+            const parts = fullString.split(' - ');
+            const name = parts[0] || 'Nome Desconhecido';
+            return { name, location: "" };
         }
-        if (tries > 50) break; // Evita loop infinito
-    } while (!isPlaceable);
-    
-    // Se não encontrou lugar após muitas tentativas, cancela
-    if (!isPlaceable && tries > 50) {
-        container.removeChild(star);
-        return;
-    }
 
-    // Define a posição absoluta do centro (relativa ao body, mas como o #name-container é 100vh, funciona)
-    star.style.left = `${x}px`;
-    star.style.top = `${y}px`;
+        // NOVO: Verifica se um novo nome sobrepõe outro
+        function isOverlapping(x, y, width, height) {
+            for (const star of activeStars) {
+                // As coordenadas x e y são relativas ao #name-area
+                const buffer = 20; // espaço mínimo entre nomes
+                
+                const starX = parseFloat(star.style.left);
+                const starY = parseFloat(star.style.top);
+                const starWidth = star.offsetWidth;
+                const starHeight = star.offsetHeight;
 
-    // Armazena a posição absoluta e dimensões no array activeStars
-    const newStarData = {
-        starElement: star, 
-        x: x, 
-        y: y,
-        width: width,
-        height: height
-    };
-    activeStars.push(newStarData);
-
-    // Mostra o nome
-    setTimeout(() => star.classList.add("visible", "animated"), 100);
-
-    // Remove após tempo
-    setTimeout(() => {
-        star.classList.remove("visible");
-        setTimeout(() => {
-            if (container.contains(star)) {
-                container.removeChild(star);
-                // Remove do array de controle
-                activeStars = activeStars.filter(s => s !== newStarData); 
+                if (
+                    x < starX + starWidth + buffer &&
+                    x + width + buffer > starX &&
+                    y < starY + starHeight + buffer &&
+                    y + height + buffer > starY
+                ) {
+                    return true;
+                }
             }
-        }, 1000);
-    }, displayDuration); 
-}
+            return false;
+        }
 
-// Ciclo principal
-function startStarrySky() {
-    if (!isPlaying || names.length === 0) return;
+        /**
+         * Função para criar uma "estrela" (nome) na área do container.
+         */
+        function createStar(name) {
+            const star = document.createElement("div");
+            star.className = "star-name";
+            star.textContent = name;
+            
+            // Adiciona ao container temporariamente para calcular o tamanho
+            container.appendChild(star);
 
-    // Seleção aleatória 
-    const randomIndex = Math.floor(Math.random() * names.length);
-    const { name } = parseNameAndLocation(names[randomIndex]);
-    createStar(name);
+            const containerWidth = container.offsetWidth;
+            const containerHeight = container.offsetHeight;
+            
+            // Calcula largura e altura do texto
+            const width = star.offsetWidth;
+            const height = star.offsetHeight;
+            
+            let x, y, tries = 0;
+            do {
+                // Gera coordenadas aleatórias dentro do container #name-area
+                x = Math.random() * (containerWidth - width);
+                y = Math.random() * (containerHeight - height);
+                
+                tries++;
+                if (tries > 50) break; // Aumentado o limite de tentativas para melhor distribuição
+            } while (isOverlapping(x, y, width, height));
+            
+            // Se não encontrou uma posição sem sobreposição após 50 tentativas, remove e não exibe
+            if (tries > 50) {
+                container.removeChild(star);
+                return;
+            }
 
-    timeoutId = setTimeout(startStarrySky, creationInterval); 
-}
+            star.style.left = `${x}px`;
+            star.style.top = `${y}px`;
 
-// Carrega lista
-fetch('names.json')
-    .then(r => r.json())
-    .then(data => {
-        names = data;
-        playBtn.disabled = false;
-        container.textContent = "Clique em 'Iniciar Homenagem' para começar.";
-    })
-    .catch(() => {
-        container.textContent = "Erro ao carregar names.json. Verifique o arquivo.";
-    });
+            // Animação de fade-in
+            setTimeout(() => {
+                star.classList.add("visible");
+                star.classList.add("animated");
+            }, 100);
+            
+            // Adiciona a estrela à lista de ativas
+            activeStars.push(star);
 
-function showButtons() { buttonContainer.classList.remove('hidden-controls'); }
-function hideButtons() { buttonContainer.classList.add('hidden-controls'); }
+            // Remove a estrela após o tempo de exibição (displayDuration)
+            setTimeout(() => {
+                star.classList.remove("visible");
+                setTimeout(() => {
+                    if(container.contains(star)) {
+                        container.removeChild(star);
+                        // Remove da lista de ativas
+                        activeStars = activeStars.filter(s => s !== star);
+                    }
+                }, 1000); // Espera a transição de fade-out (1 segundo)
+            }, displayDuration); 
+        }
 
-function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-        fullscreenBtn.innerHTML = "⛶ Sair da Tela Cheia";
-    } else {
-        document.exitFullscreen();
-        fullscreenBtn.innerHTML = "⛶ Tela Cheia";
-    }
-}
+        /**
+         * Função para iniciar o "Céu Estrelado"
+         */
+        function startStarrySky() {
+            if (!isPlaying || names.length === 0) return;
 
-function play() {
-    if (isPlaying) return;
-    isPlaying = true;
-    playBtn.disabled = true;
-    pauseBtn.disabled = false;
-    hideButtons();
-    if (timeoutId) clearTimeout(timeoutId);
-    startStarrySky();
-}
+            // Pega um nome aleatório da lista
+            const randomIndex = Math.floor(Math.random() * names.length);
+            const nameData = names[randomIndex];
+            const { name } = parseNameAndLocation(nameData);
 
-function pause() {
-    if (!isPlaying) return;
-    isPlaying = false;
-    playBtn.disabled = false;
-    pauseBtn.disabled = true;
-    showButtons();
-    if (timeoutId) clearTimeout(timeoutId);
-}
+            // Cria a estrela
+            createStar(name);
 
-playBtn.addEventListener('click', play);
-pauseBtn.addEventListener('click', pause);
-fullscreenBtn.addEventListener('click', toggleFullscreen);
+            // Cria a próxima estrela após o intervalo (creationInterval)
+            timeoutId = setTimeout(startStarrySky, creationInterval); 
+        }
 
-showButtons();
-</script>
+        // Carrega os nomes do arquivo JSON
+        fetch('names.json') 
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar names.json: ' + response.statusText);
+                }
+                return response.json(); 
+            })
+            .then(data => {
+                names = data; 
+                
+                if (names.length > 0) {
+                    container.textContent = ""; // Limpa a mensagem de "Carregando nomes..."
+                } else {
+                    container.textContent = "Lista de nomes vazia.";
+                }
+                
+                playBtn.disabled = false;
+                pauseBtn.disabled = true;
+            })
+            .catch(error => {
+                console.error("Erro ao carregar a lista de nomes:", error);
+                container.textContent = "Erro ao carregar nomes. Verifique se o arquivo names.json está na mesma pasta.";
+            });
+
+        // Função para mostrar os botões
+        function showButtons() {
+            buttonContainer.classList.remove('hidden-controls');
+        }
+
+        // Função para ocultar os botões
+        function hideButtons() {
+            buttonContainer.classList.add('hidden-controls');
+        }
+
+        // Função para alternar o modo de tela cheia
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+                fullscreenBtn.innerHTML = "⛶ Sair da Tela Cheia";
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    fullscreenBtn.innerHTML = "⛶ Tela Cheia";
+                }
+            }
+        }
+
+        function play() {
+            if (isPlaying) return;
+            
+            isPlaying = true;
+            playBtn.disabled = true;
+            pauseBtn.disabled = false;
+            hideButtons(); 
+            
+            // Limpa qualquer timeout anterior
+            if (timeoutId) clearTimeout(timeoutId);
+            
+            // Inicia o ciclo de estrelas
+            startStarrySky();
+        }
+
+        function pause() {
+            if (!isPlaying) return;
+            isPlaying = false;
+            playBtn.disabled = false;
+            pauseBtn.disabled = true;
+            showButtons(); 
+            
+            if (timeoutId) clearTimeout(timeoutId); 
+        }
+
+        playBtn.addEventListener('click', play);
+        pauseBtn.addEventListener('click', pause);
+        fullscreenBtn.addEventListener('click', toggleFullscreen); 
+        
+        // Mostra os botões inicialmente para permitir o primeiro play
+        showButtons();
+        
+        // Adiciona um listener para quando sair do modo tela cheia para mostrar os botões
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+                showButtons();
+                if (isPlaying) {
+                    pause();
+                }
+            } else {
+                if (isPlaying) {
+                    hideButtons();
+                }
+            }
+        });
+    </script>
 </body>
 </html>
